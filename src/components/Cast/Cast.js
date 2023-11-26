@@ -6,55 +6,55 @@ const defaultImg =
   'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
 
 const Cast = () => {
-  const { id } = useParams();
+  const params = useParams();
   const [error, setError] = useState(false);
   const [authors, setAuthors] = useState(null);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
-    fetchMovieCredits(id)
-      .then(({ cast }) => {
-        if (isMounted) {
-          setAuthors(cast);
-          setError(false);
-        }
-      })
-      .catch(error => {
-        if (isMounted) {
-          console.log(error);
-          setAuthors(null);
-          setError('Something went wrong, please try again.');
-        }
-      });
+    const fetchMovieCast = async () => {
+      try {
+        setLoader(true);
+        setError(false);
 
-    return () => {
-      isMounted = false;
+        const result = await fetchMovieCredits(params.movieId);
+        setAuthors(result);
+      } catch (error) {
+        console.error(error);
+        setError(true);
+      } finally {
+        setLoader(false);
+      }
     };
-  }, [id]);
+
+    fetchMovieCast();
+  }, [params.movieId]);
 
   return (
     <>
-      {error && <p>{error}</p>}
+      {loader && <p>Loading...</p>}
+      {error && <p>Error loading cast details</p>}
       {authors && (
         <ul>
           {authors.length < 1 ? (
             <p>Sorry, no description available</p>
           ) : (
-            authors.map(({ character, id, name, profile_path }) => (
-              <li key={id}>
-                <img
-                  src={
-                    profile_path
-                      ? `https://image.tmdb.org/t/p/w500/${profile_path}`
-                      : defaultImg
-                  }
-                  width={250}
-                  alt="poster"
-                />
-                <h3>Actor: {name}</h3>
-                <p>Role: {character}</p>
-              </li>
-            ))
+            authors.map(
+              ({ character, id, name, profile_path, original_name }) => (
+                <li key={id}>
+                  <img
+                    src={
+                      profile_path
+                        ? `https://image.tmdb.org/t/p/w185/${profile_path}`
+                        : defaultImg
+                    }
+                    alt={original_name}
+                  />
+                  <h3>Actor: {name}</h3>
+                  <p>Role: {character}</p>
+                </li>
+              )
+            )
           )}
         </ul>
       )}

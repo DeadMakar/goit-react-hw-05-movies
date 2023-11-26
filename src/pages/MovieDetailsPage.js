@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useLocation, Link } from 'react-router-dom';
+import { useParams, useLocation, Link, Outlet } from 'react-router-dom';
 import { fetchMovieDetails } from '../api/api';
 
 const MoviesDetails = () => {
@@ -62,6 +62,7 @@ const MoviesDetails = () => {
           </li>
         </ul>
       </div>
+      <Outlet />
     </>
   );
 };

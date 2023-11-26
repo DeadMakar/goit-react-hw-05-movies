@@ -6,18 +6,26 @@ import Loader from 'components/Loader/Loader';
 const Reviews = () => {
   const { movieId } = useParams();
   const [reviews, setReviews] = useState(null);
+  const [loader, setLoader] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMovieInfo = async movieId => {
       try {
-        const movieReviews = await fetchMovieReviews(movieId);
-        setReviews(movieReviews.results);
+        setLoader(true);
+        setError(false);
+
+        const result = await fetchMovieReviews(movieId);
+        setReviews(result);
       } catch (error) {
-        console.error('Error fetching movie reviews:', error.message);
+        console.error(error);
+        setError(true);
+      } finally {
+        setLoader(false);
       }
     };
 
-    fetchData();
+    fetchMovieInfo(movieId);
   }, [movieId]);
 
   if (!reviews) {
@@ -25,9 +33,24 @@ const Reviews = () => {
   }
 
   return (
-    <div>
-      <h2>Reviews</h2>
-    </div>
+    <>
+      {loader && <p>Loading...</p>}
+      {error && <p>Error loading details</p>}
+      {reviews && (
+        <ul>
+          {reviews.length < 1 ? (
+            <p>Sorry, no description available</p>
+          ) : (
+            reviews.map(({ author, id, content }) => (
+              <li key={id}>
+                <h3>{author}</h3>
+                <p>{content}</p>
+              </li>
+            ))
+          )}
+        </ul>
+      )}
+    </>
   );
 };
 
