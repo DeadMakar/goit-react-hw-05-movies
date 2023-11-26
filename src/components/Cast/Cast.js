@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchMovieCredits } from '../../api/api';
+import {
+  CastCharacter,
+  CastImage,
+  CastItem,
+  CastList,
+  CastName,
+} from './Cast.styled';
 
 const defaultImg =
   'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
@@ -35,14 +42,14 @@ const Cast = () => {
       {loader && <p>Loading...</p>}
       {error && <p>Error loading cast details</p>}
       {authors && (
-        <ul>
+        <CastList>
           {authors.length < 1 ? (
             <p>Sorry, no description available</p>
           ) : (
             authors.map(
               ({ character, id, name, profile_path, original_name }) => (
-                <li key={id}>
-                  <img
+                <CastItem key={id}>
+                  <CastImage
                     src={
                       profile_path
                         ? `https://image.tmdb.org/t/p/w185/${profile_path}`
@@ -50,13 +57,13 @@ const Cast = () => {
                     }
                     alt={original_name}
                   />
-                  <h3>Actor: {name}</h3>
-                  <p>Role: {character}</p>
-                </li>
+                  <CastName>Actor: {name}</CastName>
+                  <CastCharacter>Role: {character}</CastCharacter>
+                </CastItem>
               )
             )
           )}
-        </ul>
+        </CastList>
       )}
     </>
   );

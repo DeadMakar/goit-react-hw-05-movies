@@ -1,9 +1,24 @@
 import { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import SearchBar from '../components/SearchBar/SearchBar';
 import MovieList from '../components/MovieList/MovieList';
 import Loader from 'components/Loader/Loader';
 import { useSearchParams } from 'react-router-dom';
 import { searchMoviesByKeyword } from 'api/api';
+
+const StyledMoviesPage = styled.div`
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  p {
+    color: red;
+  }
+`;
 
 const MoviesPage = () => {
   const [params, setParams] = useSearchParams({ query: '' });
@@ -26,10 +41,10 @@ const MoviesPage = () => {
         if (!isMounted) return;
 
         setMovies(response.results);
-      } catch (error) {
+      } catch (err) {
         if (!isMounted) return;
 
-        setError(error);
+        setError(err);
       } finally {
         setLoading(false);
       }
@@ -47,22 +62,14 @@ const MoviesPage = () => {
   }, [moviesName]);
 
   return (
-    <>
-      <h1
-        style={{
-          textAlign: 'center',
-          paddingTop: '20px',
-          paddingBottom: '20px',
-        }}
-      >
-        Movies Search
-      </h1>
+    <StyledMoviesPage>
+      <h1>Movies Search</h1>
       <SearchBar handleSearch={handleSearch} />
       {loading && <Loader />}
-      {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+      {error && <p>Error: {error.message}</p>}
       {movies.length === 0 && <p>No movies found.</p>}
       {movies.length > 0 && <MovieList movies={movies} />}
-    </>
+    </StyledMoviesPage>
   );
 };
 

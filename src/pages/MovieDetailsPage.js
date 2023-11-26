@@ -1,6 +1,60 @@
 import { useEffect, useState } from 'react';
 import { useParams, useLocation, Link, Outlet } from 'react-router-dom';
 import { fetchMovieDetails } from '../api/api';
+import styled from 'styled-components';
+
+const DetailsContainer = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+`;
+
+const BackLink = styled(Link)`
+  display: block;
+  margin-bottom: 20px;
+  text-decoration: none;
+  color: #3498db;
+  font-size: 18px;
+`;
+
+const MovieImage = styled.img`
+  max-width: 100%;
+  height: auto;
+`;
+
+const MovieTitle = styled.h2`
+  margin: 10px 0;
+`;
+
+const Score = styled.p`
+  margin: 5px 0;
+`;
+
+const Overview = styled.p`
+  margin: 10px 0;
+`;
+
+const Genres = styled.p`
+  margin: 10px 0;
+`;
+
+const AdditionalInfo = styled.div`
+  margin-top: 20px;
+`;
+
+const InfoHeading = styled.h3`
+  margin-bottom: 10px;
+`;
+
+const InfoList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const InfoItem = styled.li`
+  margin-bottom: 5px;
+`;
 
 const MoviesDetails = () => {
   const { movieId } = useParams();
@@ -25,11 +79,11 @@ const MoviesDetails = () => {
     moviesDetails;
 
   return (
-    <>
-      <Link to={buttonBack}>Go Back</Link>
+    <DetailsContainer>
+      <BackLink to={buttonBack}>Go Back</BackLink>
       <div>
         <div>
-          <img
+          <MovieImage
             src={
               poster_path ? `https://image.tmdb.org/t/p/w300${poster_path}` : ''
             }
@@ -38,32 +92,38 @@ const MoviesDetails = () => {
         </div>
         <div>
           {title && (
-            <h2>
+            <MovieTitle>
               {title} {release_date?.substr(0, 4)}
-            </h2>
+            </MovieTitle>
           )}
 
-          <p>User Score: {vote_average && Math.floor(vote_average * 10)}%</p>
-          <h2>Overview</h2>
-          <p>{overview}</p>
-          <h2>Genres</h2>
-          {genres && <p>{genres.map(({ name }) => name).join(', ')}</p>}
+          <Score>
+            User Score: {vote_average && Math.floor(vote_average * 10)}%
+          </Score>
+          <Overview>
+            <h2>Overview</h2>
+            <p>{overview}</p>
+          </Overview>
+          <Genres>
+            <h2>Genres</h2>
+            {genres && <p>{genres.map(({ name }) => name).join(', ')}</p>}
+          </Genres>
         </div>
       </div>
 
-      <div>
-        <h3>Additional information</h3>
-        <ul>
-          <li>
+      <AdditionalInfo>
+        <InfoHeading>Additional information</InfoHeading>
+        <InfoList>
+          <InfoItem>
             <Link to={`cast`}>Cast</Link>
-          </li>
-          <li>
+          </InfoItem>
+          <InfoItem>
             <Link to={`reviews`}>Reviews</Link>
-          </li>
-        </ul>
-      </div>
+          </InfoItem>
+        </InfoList>
+      </AdditionalInfo>
       <Outlet />
-    </>
+    </DetailsContainer>
   );
 };
 
