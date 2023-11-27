@@ -1,65 +1,28 @@
 import { useEffect, useState } from 'react';
 import { useParams, useLocation, Link, Outlet } from 'react-router-dom';
-import { fetchMovieDetails } from '../api/api';
-import styled from 'styled-components';
+import { fetchMovieDetails } from '../../api/api';
+import {
+  AdditionalInfo,
+  Button,
+  DetailsContainer,
+  Genres,
+  InfoBox,
+  InfoHeading,
+  InfoItem,
+  InfoList,
+  MovieImage,
+  MovieTitle,
+  Overview,
+  Score,
+} from './MovieDetailsPage.styled';
 
-const DetailsContainer = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-`;
-
-const BackLink = styled(Link)`
-  display: block;
-  margin-bottom: 20px;
-  text-decoration: none;
-  color: #3498db;
-  font-size: 18px;
-`;
-
-const MovieImage = styled.img`
-  max-width: 100%;
-  height: auto;
-`;
-
-const MovieTitle = styled.h2`
-  margin: 10px 0;
-`;
-
-const Score = styled.p`
-  margin: 5px 0;
-`;
-
-const Overview = styled.p`
-  margin: 10px 0;
-`;
-
-const Genres = styled.p`
-  margin: 10px 0;
-`;
-
-const AdditionalInfo = styled.div`
-  margin-top: 20px;
-`;
-
-const InfoHeading = styled.h3`
-  margin-bottom: 10px;
-`;
-
-const InfoList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`;
-
-const InfoItem = styled.li`
-  margin-bottom: 5px;
-`;
+const defaultImg =
+  'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
 
 const MoviesDetails = () => {
   const { movieId } = useParams();
   const location = useLocation();
-  const [moviesDetails, setMoviesDetails] = useState({});
+  const [moviesDetails, setMoviesDetails] = useState(null);
   const buttonBack = location.state?.from ?? '/';
 
   useEffect(() => {
@@ -75,41 +38,46 @@ const MoviesDetails = () => {
     fetchData();
   }, [movieId]);
 
+  if (!moviesDetails) return;
+
   const { poster_path, title, genres, overview, vote_average, release_date } =
     moviesDetails;
 
   return (
     <DetailsContainer>
-      <BackLink to={buttonBack}>Go Back</BackLink>
-      <div>
+      <Button>
+        <Link to={buttonBack}>Go Back</Link>
+      </Button>
+      <InfoBox>
         <div>
           <MovieImage
             src={
-              poster_path ? `https://image.tmdb.org/t/p/w300${poster_path}` : ''
+              poster_path
+                ? `https://image.tmdb.org/t/p/w300${poster_path}`
+                : defaultImg
             }
             alt={title}
           />
         </div>
         <div>
-          {title && (
-            <MovieTitle>
-              {title} {release_date?.substr(0, 4)}
-            </MovieTitle>
-          )}
-
-          <Score>
-            User Score: {vote_average && Math.floor(vote_average * 10)}%
-          </Score>
+          <MovieTitle>
+            {title} {release_date?.substr(0, 4)}
+          </MovieTitle>
+          <Score>User Score: {Math.floor(vote_average * 10)}%</Score>
           <Overview>
             <h2>Overview</h2>
             <p>{overview}</p>
           </Overview>
           <Genres>
             <h2>Genres</h2>
-            {genres && <p>{genres.map(({ name }) => name).join(', ')}</p>}
+            <ul>
+              {genres.map(({ id, name }) => (
+                <li key={id}>{name}</li>
+              ))}
+            </ul>
           </Genres>
         </div>
-      </div>
+      </InfoBox>
 
       <AdditionalInfo>
         <InfoHeading>Additional information</InfoHeading>

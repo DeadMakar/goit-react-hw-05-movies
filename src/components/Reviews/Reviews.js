@@ -35,27 +35,24 @@ const Reviews = () => {
     fetchMovieInfo(movieId);
   }, [movieId]);
 
-  if (!reviews) {
+  if (loader) {
     return <Loader />;
   }
 
   return (
     <ReviewsContainer>
-      {loader}
       {error && <ErrorMessage>Error loading details</ErrorMessage>}
-      {reviews && (
+      {reviews && reviews.length > 0 ? (
         <ReviewList>
-          {reviews.length < 1 ? (
-            <ErrorMessage>Sorry, no description available</ErrorMessage>
-          ) : (
-            reviews.map(({ author, id, content }) => (
-              <ReviewItem key={id}>
-                <AuthorHeading>{author}</AuthorHeading>
-                <p>{content}</p>
-              </ReviewItem>
-            ))
-          )}
+          {reviews.map(({ author, id, content }) => (
+            <ReviewItem key={id}>
+              <AuthorHeading>{author}</AuthorHeading>
+              <p>{content}</p>
+            </ReviewItem>
+          ))}
         </ReviewList>
+      ) : (
+        <ErrorMessage>Sorry, no reviews available</ErrorMessage>
       )}
     </ReviewsContainer>
   );

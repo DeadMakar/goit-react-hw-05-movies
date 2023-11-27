@@ -5,6 +5,7 @@ export const List = styled.ul`
   flex-wrap: wrap;
   padding: 0;
   margin: 0;
+  justify-content: center;
 `;
 
 export const Li = styled.li`
@@ -28,4 +29,8 @@ export const Card = styled.div`
 
 export const Img = styled.img`
   width: 250px;
+`;
+
+export const PosterTitle = styled.p`
+  font-size: 20px;
 `;

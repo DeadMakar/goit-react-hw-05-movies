@@ -1,14 +1,8 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { StyledHomePage, TitleStyled } from './HomePage.styled.js';
 import { fetchTrendingMovies } from 'api/api';
 import Loader from 'components/Loader/Loader';
 import MovieList from 'components/MovieList/MovieList';
-
-const StyledHomePage = styled.div`
-  text-align: center;
-  padding-top: 20px;
-  padding-bottom: 20px;
-`;
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
@@ -27,7 +21,7 @@ const HomePage = () => {
 
   return (
     <StyledHomePage>
-      <h2 aria-label="Trending today">Trending today</h2>
+      <TitleStyled aria-label="Trending today">Trending today</TitleStyled>
       <MovieList movies={movies} />
       {loader && <Loader />}
     </StyledHomePage>

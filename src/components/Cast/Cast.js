@@ -40,27 +40,23 @@ const Cast = () => {
   return (
     <>
       {loader && <p>Loading...</p>}
-      {error && <p>Error loading cast details</p>}
-      {authors && (
+      {error && !authors && <p>Error loading cast details</p>}
+      {authors && authors.length > 0 && (
         <CastList>
-          {authors.length < 1 ? (
-            <p>Sorry, no description available</p>
-          ) : (
-            authors.map(
-              ({ character, id, name, profile_path, original_name }) => (
-                <CastItem key={id}>
-                  <CastImage
-                    src={
-                      profile_path
-                        ? `https://image.tmdb.org/t/p/w185/${profile_path}`
-                        : defaultImg
-                    }
-                    alt={original_name}
-                  />
-                  <CastName>Actor: {name}</CastName>
-                  <CastCharacter>Role: {character}</CastCharacter>
-                </CastItem>
-              )
+          {authors.map(
+            ({ character, id, name, profile_path, original_name }) => (
+              <CastItem key={id}>
+                <CastImage
+                  src={
+                    profile_path
+                      ? `https://image.tmdb.org/t/p/w185/${profile_path}`
+                      : defaultImg
+                  }
+                  alt={original_name}
+                />
+                <CastName>Actor: {name}</CastName>
+                <CastCharacter>Role: {character}</CastCharacter>
+              </CastItem>
             )
           )}
         </CastList>
