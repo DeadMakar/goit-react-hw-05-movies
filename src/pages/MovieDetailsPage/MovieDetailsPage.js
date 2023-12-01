@@ -3,7 +3,6 @@ import { useParams, useLocation, Link, Outlet } from 'react-router-dom';
 import { fetchMovieDetails } from '../../api/api';
 import {
   AdditionalInfo,
-  Button,
   DetailsContainer,
   Genres,
   InfoBox,
@@ -15,6 +14,7 @@ import {
   Overview,
   Score,
 } from './MovieDetailsPage.styled';
+import ButtonBack from 'components/ButtonBack/ButtonBack';
 
 const defaultImg =
   'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
@@ -45,9 +45,8 @@ const MoviesDetails = () => {
 
   return (
     <DetailsContainer>
-      <Button>
-        <Link to={buttonBack}>Go Back</Link>
-      </Button>
+      <ButtonBack to={buttonBack} />
+
       <InfoBox>
         <div>
           <MovieImage
