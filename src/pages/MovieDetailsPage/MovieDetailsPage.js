@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useLocation, Link, Outlet } from 'react-router-dom';
 import { fetchMovieDetails } from '../../api/api';
 import {
@@ -23,7 +23,7 @@ const MoviesDetails = () => {
   const { movieId } = useParams();
   const location = useLocation();
   const [moviesDetails, setMoviesDetails] = useState(null);
-  const buttonBack = location.state?.from ?? '/';
+  const backLinkRef = useRef(location);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +45,7 @@ const MoviesDetails = () => {
 
   return (
     <DetailsContainer>
-      <ButtonBack to={buttonBack} />
+      <ButtonBack to={backLinkRef.current.state?.from ?? '/'} />
 
       <InfoBox>
         <div>
